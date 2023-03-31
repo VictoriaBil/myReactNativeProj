@@ -10,6 +10,7 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   Platform,
+  Button,
 } from "react-native";
 
 const initialFormState = {
@@ -22,7 +23,7 @@ const initialFocusState = {
   password: false,
 };
 
-export const LoginScreen = () => {
+export const LoginScreen = ({ navigation }) => {
   const [isKeyboardShow, setIsKeyboardShow] = useState(false);
   const [onFocus, setOnFocus] = useState(initialFocusState);
   const [formState, setFormState] = useState(initialFormState);
@@ -52,7 +53,7 @@ export const LoginScreen = () => {
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <ImageBackground
         style={styles.image}
-        source={require("../assets/bgImage.jpg")}
+        source={require("../../assets/bgImage.jpg")}
       >
         <KeyboardAvoidingView behavior={Platform.OS == "ios" && "padding"}>
           <TouchableWithoutFeedback onPress={keyboardHide}>
@@ -121,7 +122,12 @@ export const LoginScreen = () => {
                   >
                     <Text style={styles.btnText}>Увійти</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.link} activeOpacity={0.7}>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("Registration")}
+                    style={{
+                      alignItems: "center",
+                    }}
+                  >
                     <Text style={styles.linkText}>
                       Немає акаунта? Зареєструватись
                     </Text>
@@ -149,7 +155,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 30,
-    fontWeight: 500,
+    fontWeight: "500",
     textAlign: "center",
     marginBottom: 32,
   },
