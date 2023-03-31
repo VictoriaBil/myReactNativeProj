@@ -1,5 +1,4 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
 import { useRoute } from "./router/router";
 import { NavigationContainer } from "@react-navigation/native";
 
