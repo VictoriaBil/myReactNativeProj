@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { Header } from "../../components/Header/Header";
 import { Camera } from "expo-camera";
 import { Feather } from "@expo/vector-icons";
+import * as MediaLibrary from "expo-media-library";
 import * as Location from "expo-location";
 
 const CreatePostScreen = ({ navigation }) => {
@@ -13,6 +14,7 @@ const CreatePostScreen = ({ navigation }) => {
   useEffect(() => {
     (async () => {
       await Camera.requestCameraPermissionsAsync();
+      await MediaLibrary.requestPermissionsAsync();
       await Location.requestForegroundPermissionsAsync();
     })();
   }, []);
