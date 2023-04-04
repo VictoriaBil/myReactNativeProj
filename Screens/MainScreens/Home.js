@@ -43,7 +43,7 @@ export const Home = () => {
           //     </TouchableOpacity>
           //   ),
         }}
-        name="Публікації"
+        name="Posts"
         component={PostsScreen}
       ></MainTab.Screen>
       <MainTab.Screen

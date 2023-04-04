@@ -72,7 +72,7 @@ export const RegistrationScreen = ({ navigation }) => {
             <Text style={styles.title}>Реєстрація</Text>
             <View style={styles.inputWrap}>
               <TextInput
-                style={styles.input}
+                style={styles.inputLogin}
                 placeholder="Логін"
                 placeholderTextColor="#BDBDBD"
                 name="login"
@@ -188,6 +188,17 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 16,
     fontSize: 16,
+  },
+  inputLogin: {
+    backgroundColor: "#f6f6f6",
+    borderWidth: 1,
+    height: 50,
+    width: "100%",
+    borderColor: "#e8e8e8",
+    borderRadius: 8,
+    padding: 16,
+    fontSize: 16,
+    marginBottom: 16,
   },
   title: {
     fontSize: 30,

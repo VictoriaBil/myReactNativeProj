@@ -1,12 +1,32 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, FlatList, Image } from "react-native";
 import { Header } from "../../components/Header/Header";
 
-const PostsScreen = () => {
+const PostsScreen = ({ route }) => {
+  const [posts, setPosts] = useState([]);
+  console.log("route.params", route.params);
+
+  useEffect(() => {
+    if (route.params) {
+      setPosts((prevState) => [...prevState, route.params]);
+    }
+  }, [route.params]);
+
   return (
     <View style={styles.container}>
       <Header title="Публікації" />
-      <Text>PostsScreen</Text>
+      <FlatList
+        data={posts}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
+          <View>
+            <Image
+              source={{ uri: item.photo }}
+              style={{ width: 300, height: 200 }}
+            />
+          </View>
+        )}
+      />
     </View>
   );
 };
