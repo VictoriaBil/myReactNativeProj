@@ -8,7 +8,7 @@ const PostsScreen = ({ route }) => {
 
   useEffect(() => {
     if (route.params) {
-      setPosts((prevState) => [...prevState, route.params]);
+      setPosts((prevState) => [...prevState, route.params.photo]);
     }
   }, [route.params]);
 

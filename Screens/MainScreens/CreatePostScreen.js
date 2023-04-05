@@ -19,11 +19,19 @@ const CreatePostScreen = ({ navigation }) => {
     })();
   }, []);
 
+  useEffect(() => {
+    async () => {};
+  }, [photo]);
+
   const takePicture = async () => {
-    const photo = await camera.takePictureAsync();
+    const { uri } = await camera.takePictureAsync();
+    setPhoto(uri);
+    console.log(uri);
     const location = await Location.getCurrentPositionAsync();
-    console.log(location);
-    setPhoto(photo.uri);
+    setLocation({
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+    });
   };
 
   const sendPicture = () => {
