@@ -1,11 +1,15 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { Header } from "../../components/Header/Header";
 
 const CommentsScreen = () => {
   return (
-    <View style={styles.container}>
-      <Text>CommentsScreen</Text>
-    </View>
+    <>
+      <Header title="Коментарі" />
+      <View style={styles.container}>
+        <Text>CommentsScreen</Text>
+      </View>
+    </>
   );
 };
 

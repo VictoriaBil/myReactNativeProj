@@ -1,5 +1,6 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
 import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
@@ -7,8 +8,6 @@ import { Feather } from "@expo/vector-icons";
 import PostsScreen from "../../Screens/MainScreens/PostsScreen";
 import ProfileScreen from "../../Screens/MainScreens/ProfileScreen";
 import CreatePostScreen from "../../Screens/MainScreens/CreatePostScreen";
-import MapScreen from "../AdditionalScreens/MapScreen";
-import CommentsScreen from "../AdditionalScreens/CommentsScreen";
 
 const MainTab = createBottomTabNavigator();
 
@@ -33,16 +32,6 @@ export const Home = () => {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="grid-outline" size={size} color={color} />
           ),
-          //   headerRight: ({ color, size }) => (
-          //     <TouchableOpacity onPress={() => {}}>
-          //       <Ionicons
-          //         name="log-out-outline"
-          //         size={24}
-          //         color={color}
-          //         style={{ marginRight: 10 }}
-          //       />
-          //     </TouchableOpacity>
-          //   ),
         }}
         name="Posts"
         component={PostsScreen}
@@ -67,16 +56,6 @@ export const Home = () => {
         name="Profile"
         component={ProfileScreen}
       ></MainTab.Screen>
-      <MainTab.Screen
-        options={{ headerShown: false }}
-        name="Map"
-        component={MapScreen}
-      />
-      <MainTab.Screen
-        options={{ headerShown: false }}
-        name="Comments"
-        component={CommentsScreen}
-      />
     </MainTab.Navigator>
   );
 };

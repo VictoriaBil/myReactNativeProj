@@ -4,6 +4,9 @@ import { RegistrationScreen } from "../Screens/Auth/RegistrationScreen";
 import { LoginScreen } from "../Screens/Auth/LoginScreen";
 import { Home } from "../Screens/MainScreens/Home";
 
+import MapScreen from "../Screens/AdditionalScreens/MapScreen";
+import CommentsScreen from "../Screens/AdditionalScreens/CommentsScreen";
+
 const AuthStack = createStackNavigator();
 
 export const useRoute = (isAuth) => {
@@ -24,5 +27,23 @@ export const useRoute = (isAuth) => {
     );
   }
 
-  return Home();
+  return (
+    <AuthStack.Navigator>
+      <AuthStack.Screen
+        options={{ headerShown: false }}
+        name="Home"
+        component={Home}
+      />
+      <AuthStack.Screen
+        options={{ headerShown: false }}
+        name="Map"
+        component={MapScreen}
+      />
+      <AuthStack.Screen
+        options={{ headerShown: false }}
+        name="Comments"
+        component={CommentsScreen}
+      />
+    </AuthStack.Navigator>
+  );
 };

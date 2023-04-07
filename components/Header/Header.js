@@ -1,14 +1,26 @@
 import React from "react";
+import { useNavigation } from "@react-navigation/native";
 import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
+import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 
 export const Header = ({ title }) => {
+  const navigation = useNavigation();
   return (
     <View style={styles.header}>
       <Text style={styles.headerTitle}>{title}</Text>
-      <TouchableOpacity style={styles.logOutBtn} onPress={() => {}}>
-        <MaterialIcons name="logout" size={24} color="#BDBDBD" />
-      </TouchableOpacity>
+      {title === "Публікації" && (
+        <TouchableOpacity style={styles.logOutBtn} onPress={() => {}}>
+          <MaterialIcons name="logout" size={24} color="#BDBDBD" />
+        </TouchableOpacity>
+      )}
+      {title !== "Публікації" && (
+        <TouchableOpacity
+          style={styles.backBtn}
+          onPress={() => navigation.navigate("Posts")}
+        >
+          <AntDesign name="arrowleft" size={24} />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -34,4 +46,5 @@ const styles = StyleSheet.create({
     right: 10,
     bottom: "25%",
   },
+  backBtn: { position: "absolute", left: 10, bottom: "25%" },
 });
