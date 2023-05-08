@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import {
   View,
   Text,
@@ -9,10 +10,25 @@ import {
 } from "react-native";
 import { Feather, EvilIcons } from "@expo/vector-icons";
 import { Header } from "../../components/Header/Header";
+import { db } from "../../firebase/config";
+import { onSnapshot, collection } from "firebase/firestore";
+
+const selectUserProfile = (state) => state.auth;
 
 const PostsScreen = ({ route, navigation }) => {
   const [posts, setPosts] = useState([]);
-  console.log("route.params", route.params);
+
+  const { userName, userEmail } = useSelector(selectUserProfile);
+
+  const getPosts = () => {
+    onSnapshot(collection(db, "posts"), (collection) => {
+      setPosts(collection.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    });
+  };
+
+  useEffect(() => {
+    getPosts();
+  }, []);
 
   useEffect(() => {
     if (route.params) {
@@ -29,8 +45,8 @@ const PostsScreen = ({ route, navigation }) => {
             <Image />
           </View>
           <View style={styles.userInfo}>
-            <Text style={styles.userLogin}>Teddy Bear</Text>
-            <Text style={styles.userMail}>exs@mail.com</Text>
+            <Text style={styles.userLogin}>{userName}</Text>
+            <Text style={styles.userMail}>{userEmail}</Text>
           </View>
         </View>
         <FlatList
@@ -38,7 +54,7 @@ const PostsScreen = ({ route, navigation }) => {
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
             <View>
-              <Image source={{ uri: item.photo }} style={styles.photoWrap} />
+              <Image source={{ uri: item.photoUrl }} style={styles.photoWrap} />
               <Text
                 style={{ fontSize: 16, marginVertical: 8, fontWeight: "500" }}
               >
@@ -54,7 +70,10 @@ const PostsScreen = ({ route, navigation }) => {
               >
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("Comments");
+                    navigation.navigate("Comments", {
+                      photoUrl: item.photoUrl,
+                      postId: item.id,
+                    });
                   }}
                   style={styles.comments}
                 >
@@ -67,7 +86,10 @@ const PostsScreen = ({ route, navigation }) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("Map", { item });
+                    navigation.navigate("Map", {
+                      latitude: item.latitude,
+                      longitude: item.longitude,
+                    });
                   }}
                   style={styles.comments}
                 >

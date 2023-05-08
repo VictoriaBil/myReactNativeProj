@@ -58,7 +58,8 @@ const CreatePostScreen = ({ navigation }) => {
       }
       // await Camera.requestCameraPermissionsAsync();
       // await MediaLibrary.requestPermissionsAsync();
-      let location = await Location.getCurrentPositionAsync({});
+      let location = await Location.getCurrentPositionAsync();
+      console.log(location);
       const coords = {
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
@@ -75,7 +76,6 @@ const CreatePostScreen = ({ navigation }) => {
     const { uri } = await camera.takePictureAsync();
     setPhoto(uri);
     console.log(uri);
-    console.log(location);
     setIsPictureTaken(true);
   };
 
@@ -157,26 +157,6 @@ const CreatePostScreen = ({ navigation }) => {
     };
     await setDoc(doc(db, "posts", `${postId}`), postData);
   };
-
-  // const uploadPost = async () => {
-  //   const photoUrl = await uploadPictureToServer();
-  //   try {
-  //     const docRef = await addDoc(collection(db, "posts"), {
-  //       photoUrl,
-  //       name,
-  //       locationDescription,
-  //       latitude,
-  //       longitude,
-  //       userId,
-  //       userName,
-  //       comments: [],
-  //     });
-  //     console.log("Document written with ID: ", docRef.id);
-  //   } catch (e) {
-  //     console.error("Error adding document: ", e);
-  //     throw e;
-  //   }
-  // };
 
   const keyboardHide = () => {
     setIsKeyboardShow(false);

@@ -12,8 +12,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { db } from "../../firebase/config";
 import { authSignOutUser } from "../../redux/auth/authOperations";
 
+const selectUserProfile = (state) => state.auth;
+
 const ProfileScreen = () => {
   const dispatch = useDispatch();
+  const { userName } = useSelector(selectUserProfile);
   return (
     <ImageBackground
       style={styles.background}
@@ -29,7 +32,7 @@ const ProfileScreen = () => {
         >
           <MaterialIcons name="logout" size={24} color="#BDBDBD" />
         </TouchableOpacity>
-        <Text style={styles.title}>Teddy Bear</Text>
+        <Text style={styles.title}>{userName}</Text>
       </View>
     </ImageBackground>
   );
