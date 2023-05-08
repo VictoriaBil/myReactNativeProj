@@ -16,7 +16,7 @@ import { Header } from "../../components/Header/Header";
 import { Camera } from "expo-camera";
 import { useSelector } from "react-redux";
 import { db, storage } from "../../firebase/config";
-import { collection } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { Feather, EvilIcons, FontAwesome } from "@expo/vector-icons";
 import * as MediaLibrary from "expo-media-library";
@@ -43,28 +43,27 @@ const CreatePostScreen = ({ navigation }) => {
   const [onFocus, setOnFocus] = useState(initialFocusState);
   const [isKeyboardShow, setIsKeyboardShow] = useState(false);
   const [isPictureTaken, setIsPictureTaken] = useState(false);
-  const [latitude, setLatitude] = useState(null);
 
   const { userId, userName } = useSelector(selectUserProfile);
 
   useEffect(() => {
     (async () => {
+      await Camera.requestCameraPermissionsAsync();
+      await MediaLibrary.requestPermissionsAsync();
       let { status } = await Location.requestForegroundPermissionsAsync();
 
       if (status !== "granted") {
         console.log("Permission to access location was denied");
         return;
       }
-
-      await Camera.requestCameraPermissionsAsync();
-      await MediaLibrary.requestPermissionsAsync();
-      const location = await Location.getCurrentPositionAsync();
-
-      setLocation({
+      // await Camera.requestCameraPermissionsAsync();
+      // await MediaLibrary.requestPermissionsAsync();
+      let location = await Location.getCurrentPositionAsync({});
+      const coords = {
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
-      });
-      setLatitude(location.coords.latitude);
+      };
+      setLocation(coords);
     })();
   }, []);
 
@@ -87,9 +86,9 @@ const CreatePostScreen = ({ navigation }) => {
   };
 
   const uploadPictureToServer = async () => {
-    if (!photo || !location) {
-      return;
-    }
+    // if (!photo || !location) {
+    //   return;
+    // }
 
     const response = await fetch(photo);
     const file = await response.blob();
@@ -143,18 +142,41 @@ const CreatePostScreen = ({ navigation }) => {
   };
 
   const uploadPost = async () => {
-    const photoUrl = await uploadPictureToServer();
-    const createPost = db.firestore().collection("posts").add({
+    const { name, locationDescription, photoUrl } = formState;
+    // const { latitude, longitude } = location;
+    const postId = Date.now().toString();
+    const postData = {
       photoUrl,
       name,
-      locationDescription,
-      latitude,
-      longitude,
+      // locationDescription,
+      // latitude,
+      // longitude,
       userId,
       userName,
       comments: [],
-    });
+    };
+    await setDoc(doc(db, "posts", `${postId}`), postData);
   };
+
+  // const uploadPost = async () => {
+  //   const photoUrl = await uploadPictureToServer();
+  //   try {
+  //     const docRef = await addDoc(collection(db, "posts"), {
+  //       photoUrl,
+  //       name,
+  //       locationDescription,
+  //       latitude,
+  //       longitude,
+  //       userId,
+  //       userName,
+  //       comments: [],
+  //     });
+  //     console.log("Document written with ID: ", docRef.id);
+  //   } catch (e) {
+  //     console.error("Error adding document: ", e);
+  //     throw e;
+  //   }
+  // };
 
   const keyboardHide = () => {
     setIsKeyboardShow(false);

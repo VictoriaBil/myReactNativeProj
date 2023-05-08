@@ -3,7 +3,8 @@ import { Header } from "../../components/Header/Header";
 import MapView, { Marker } from "react-native-maps";
 import { StyleSheet, View } from "react-native";
 
-const MapScreen = () => {
+const MapScreen = ({ route }) => {
+  const { latitude, longitude } = route.params;
   return (
     <View>
       <Header title="Карта" />
@@ -11,8 +12,8 @@ const MapScreen = () => {
         <MapView
           style={styles.map}
           initialRegion={{
-            latitude: 37.78825,
-            longitude: -122.4324,
+            latitude,
+            longitude,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
