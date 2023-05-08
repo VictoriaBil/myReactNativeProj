@@ -10,17 +10,19 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   Platform,
-  Button,
 } from "react-native";
 
+import { useDispatch } from "react-redux";
+import { authSignInUser } from "../../redux/auth/authOperations";
+
 const initialFormState = {
-  email: "",
-  password: "",
+  userEmail: "",
+  userPassword: "",
 };
 
 const initialFocusState = {
-  email: false,
-  password: false,
+  userEmail: false,
+  userPassword: false,
 };
 
 export const LoginScreen = ({ navigation }) => {
@@ -28,6 +30,8 @@ export const LoginScreen = ({ navigation }) => {
   const [onFocus, setOnFocus] = useState(initialFocusState);
   const [formState, setFormState] = useState(initialFormState);
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
+
+  const dispatch = useDispatch();
 
   const keyboardHide = () => {
     setIsKeyboardShow(false);
@@ -46,6 +50,7 @@ export const LoginScreen = ({ navigation }) => {
 
   const handleSubmit = () => {
     console.log(formState);
+    dispatch(authSignInUser(formState));
     setFormState(initialFormState);
   };
 
@@ -79,7 +84,7 @@ export const LoginScreen = ({ navigation }) => {
                   onChangeText={(value) =>
                     setFormState((prevState) => ({
                       ...prevState,
-                      email: value,
+                      userEmail: value,
                     }))
                   }
                 />
@@ -97,7 +102,7 @@ export const LoginScreen = ({ navigation }) => {
                     onChangeText={(value) =>
                       setFormState((prevState) => ({
                         ...prevState,
-                        password: value,
+                        userPassword: value,
                       }))
                     }
                   />

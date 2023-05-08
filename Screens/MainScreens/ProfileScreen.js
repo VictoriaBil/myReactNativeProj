@@ -1,7 +1,19 @@
 import React from "react";
-import { View, Text, StyleSheet, ImageBackground, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ImageBackground,
+  Image,
+  TouchableOpacity,
+} from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
+import { useSelector, useDispatch } from "react-redux";
+import { db } from "../../firebase/config";
+import { authSignOutUser } from "../../redux/auth/authOperations";
 
 const ProfileScreen = () => {
+  const dispatch = useDispatch();
   return (
     <ImageBackground
       style={styles.background}
@@ -11,6 +23,12 @@ const ProfileScreen = () => {
         <View style={styles.photoWrap}>
           <Image />
         </View>
+        <TouchableOpacity
+          style={{ position: "absolute", right: 16, top: 22 }}
+          onPress={() => dispatch(authSignOutUser())}
+        >
+          <MaterialIcons name="logout" size={24} color="#BDBDBD" />
+        </TouchableOpacity>
         <Text style={styles.title}>Teddy Bear</Text>
       </View>
     </ImageBackground>

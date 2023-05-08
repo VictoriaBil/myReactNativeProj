@@ -11,19 +11,22 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
-  Button,
 } from "react-native";
 
+import { useDispatch } from "react-redux";
+
+import { authSignUpUser } from "../../redux/auth/authOperations";
+
 const initialFormState = {
-  login: "",
-  email: "",
-  password: "",
+  userName: "",
+  userEmail: "",
+  userPassword: "",
 };
 
 const initialFocusState = {
-  login: false,
-  email: false,
-  password: false,
+  userName: false,
+  userEmail: false,
+  userPassword: false,
 };
 
 export const RegistrationScreen = ({ navigation }) => {
@@ -31,6 +34,8 @@ export const RegistrationScreen = ({ navigation }) => {
   const [onFocus, setOnFocus] = useState(initialFocusState);
   const [formState, setFormState] = useState(initialFormState);
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
+
+  const dispatch = useDispatch();
 
   const keyboardHide = () => {
     setIsKeyboardShow(false);
@@ -49,6 +54,7 @@ export const RegistrationScreen = ({ navigation }) => {
 
   const handleSubmit = () => {
     console.log(formState);
+    dispatch(authSignUpUser(formState));
     setFormState(initialFormState);
   };
 
@@ -76,12 +82,12 @@ export const RegistrationScreen = ({ navigation }) => {
                 placeholder="Логін"
                 placeholderTextColor="#BDBDBD"
                 name="login"
-                onFocus={() => handleFocus("login")}
-                onEndEditing={() => outFocus("login")}
+                onFocus={() => handleFocus("userName")}
+                onEndEditing={() => outFocus("userName")}
                 onChangeText={(value) =>
                   setFormState((prevState) => ({
                     ...prevState,
-                    login: value,
+                    userName: value,
                   }))
                 }
               />
@@ -90,12 +96,12 @@ export const RegistrationScreen = ({ navigation }) => {
                 placeholder="Адреса електронної пошти"
                 placeholderTextColor="#BDBDBD"
                 keyboardType="email-address"
-                onFocus={() => handleFocus("email")}
-                onEndEditing={() => outFocus("email")}
+                onFocus={() => handleFocus("userEmail")}
+                onEndEditing={() => outFocus("userEmail")}
                 onChangeText={(value) =>
                   setFormState((prevState) => ({
                     ...prevState,
-                    email: value,
+                    userEmail: value,
                   }))
                 }
               />
@@ -106,12 +112,12 @@ export const RegistrationScreen = ({ navigation }) => {
                 secureTextEntry={isPasswordHidden}
                 placeholder="Пароль"
                 placeholderTextColor="#BDBDBD"
-                onFocus={() => handleFocus("password")}
-                onEndEditing={() => outFocus("password")}
+                onFocus={() => handleFocus("userPassword")}
+                onEndEditing={() => outFocus("userPassword")}
                 onChangeText={(value) =>
                   setFormState((prevState) => ({
                     ...prevState,
-                    password: value,
+                    userPassword: value,
                   }))
                 }
               />

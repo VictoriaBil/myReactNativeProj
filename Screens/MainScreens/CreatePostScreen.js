@@ -14,6 +14,10 @@ import {
 } from "react-native";
 import { Header } from "../../components/Header/Header";
 import { Camera } from "expo-camera";
+import { useSelector } from "react-redux";
+import { db, storage } from "../../firebase/config";
+import { collection } from "firebase/firestore";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { Feather, EvilIcons, FontAwesome } from "@expo/vector-icons";
 import * as MediaLibrary from "expo-media-library";
 import * as Location from "expo-location";
@@ -21,12 +25,15 @@ import * as Location from "expo-location";
 const initialFormState = {
   name: "",
   locationDescription: "",
+  photoUrl: null,
 };
 
 const initialFocusState = {
   name: false,
   locationDescription: false,
 };
+
+const selectUserProfile = (state) => state.auth;
 
 const CreatePostScreen = ({ navigation }) => {
   const [camera, setCamera] = useState(null);
@@ -35,12 +42,29 @@ const CreatePostScreen = ({ navigation }) => {
   const [formState, setFormState] = useState(initialFormState);
   const [onFocus, setOnFocus] = useState(initialFocusState);
   const [isKeyboardShow, setIsKeyboardShow] = useState(false);
+  const [isPictureTaken, setIsPictureTaken] = useState(false);
+  const [latitude, setLatitude] = useState(null);
+
+  const { userId, userName } = useSelector(selectUserProfile);
 
   useEffect(() => {
     (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
+        return;
+      }
+
       await Camera.requestCameraPermissionsAsync();
       await MediaLibrary.requestPermissionsAsync();
-      await Location.requestForegroundPermissionsAsync();
+      const location = await Location.getCurrentPositionAsync();
+
+      setLocation({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
+      setLatitude(location.coords.latitude);
     })();
   }, []);
 
@@ -52,15 +76,31 @@ const CreatePostScreen = ({ navigation }) => {
     const { uri } = await camera.takePictureAsync();
     setPhoto(uri);
     console.log(uri);
-    const location = await Location.getCurrentPositionAsync();
-    setLocation({
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-    });
+    console.log(location);
+    setIsPictureTaken(true);
   };
 
   const sendPicture = () => {
+    uploadPost();
+    // uploadPictureToServer();
     navigation.navigate("Posts", { photo });
+  };
+
+  const uploadPictureToServer = async () => {
+    if (!photo || !location) {
+      return;
+    }
+
+    const response = await fetch(photo);
+    const file = await response.blob();
+    const uniquePostId = Date.now().toString();
+    const storageRef = ref(storage, `images/${uniquePostId}`);
+    const uploadPhoto = await uploadBytesResumable(storageRef, file);
+    const photoRef = await getDownloadURL(uploadPhoto.ref);
+    setFormState((prevState) => ({ ...prevState, photoUrl: photoRef }));
+    setIsPictureTaken(false);
+
+    return;
   };
 
   const handleFocus = (inputName) => {
@@ -69,8 +109,51 @@ const CreatePostScreen = ({ navigation }) => {
   };
 
   const outFocus = (inputName) => {
-    setOnFocus((prevState) => ({ ...prevState, [inputName]: false }));
+    setOnFocus((prevState) => {
+      return { ...prevState, [inputName]: false };
+    });
     setIsKeyboardShow(false);
+  };
+
+  const handleSubmit = async () => {
+    const { name, locationDescription, photoUrl } = formState;
+
+    if (!name || !locationDescription || !photoUrl) {
+      alert("Please, fill out the form completely");
+      return;
+    }
+
+    if (!isPictureTaken) {
+      alert("Please, take a picture first");
+      return;
+    }
+
+    try {
+      await uploadPost();
+      navigation.navigate("Posts");
+      setFormState(initialFormState);
+    } catch (error) {
+      console.log("Error while uploading post: ", error);
+      alert("Failed to upload post");
+    }
+
+    // uploadPost();
+    // navigation.navigate("Posts");
+    // setFormState(initialFormState);
+  };
+
+  const uploadPost = async () => {
+    const photoUrl = await uploadPictureToServer();
+    const createPost = db.firestore().collection("posts").add({
+      photoUrl,
+      name,
+      locationDescription,
+      latitude,
+      longitude,
+      userId,
+      userName,
+      comments: [],
+    });
   };
 
   const keyboardHide = () => {
@@ -147,6 +230,7 @@ const CreatePostScreen = ({ navigation }) => {
                 style={styles.btn}
                 activeOpacity={0.7}
                 onPress={() => sendPicture()}
+                handleSubmit={handleSubmit}
               >
                 <Text style={styles.btnText}>Опублікувати</Text>
               </TouchableOpacity>
