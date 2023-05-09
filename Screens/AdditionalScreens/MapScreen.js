@@ -6,7 +6,7 @@ import { StyleSheet, View } from "react-native";
 const MapScreen = ({ route }) => {
   console.log(route.params);
   console.log(route.params.location);
-  const { latitude, longitude } = route.params.location;
+  const { latitude, longitude } = route.params;
   return (
     <View>
       <Header title="Карта" />
@@ -20,10 +20,7 @@ const MapScreen = ({ route }) => {
             longitudeDelta: 0.0421,
           }}
         >
-          <Marker
-            coordinate={{ latitude: 37.78825, longitude: -122.4324 }}
-            title="travel photo"
-          />
+          <Marker coordinate={{ latitude, longitude }} title="travel photo" />
         </MapView>
       </View>
     </View>

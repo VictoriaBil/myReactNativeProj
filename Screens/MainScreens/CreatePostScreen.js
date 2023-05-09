@@ -69,7 +69,11 @@ const CreatePostScreen = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    async () => {};
+    (async () => {
+      if (photo) {
+        await uploadPictureToServer();
+      }
+    })();
   }, [photo]);
 
   const takePicture = async () => {
@@ -80,8 +84,8 @@ const CreatePostScreen = ({ navigation }) => {
   };
 
   const sendPicture = () => {
-    uploadPost();
     // uploadPictureToServer();
+    uploadPost();
     navigation.navigate("Posts", { photo });
   };
 
@@ -143,14 +147,14 @@ const CreatePostScreen = ({ navigation }) => {
 
   const uploadPost = async () => {
     const { name, locationDescription, photoUrl } = formState;
-    // const { latitude, longitude } = location;
+    const { latitude, longitude } = location;
     const postId = Date.now().toString();
     const postData = {
       photoUrl,
       name,
-      // locationDescription,
-      // latitude,
-      // longitude,
+      locationDescription,
+      latitude,
+      longitude,
       userId,
       userName,
       comments: [],
