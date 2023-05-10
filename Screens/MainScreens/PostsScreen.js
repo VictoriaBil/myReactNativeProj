@@ -15,10 +15,10 @@ import { onSnapshot, collection } from "firebase/firestore";
 
 const selectUserProfile = (state) => state.auth;
 
-const PostsScreen = ({ route, navigation }) => {
+const PostsScreen = ({ route, item, navigation, navigateFrom }) => {
   const [posts, setPosts] = useState([]);
 
-  const { userName, userEmail } = useSelector(selectUserProfile);
+  const { userName, userEmail, userAvatar } = useSelector(selectUserProfile);
 
   const getPosts = () => {
     onSnapshot(collection(db, "posts"), (collection) => {
@@ -42,7 +42,7 @@ const PostsScreen = ({ route, navigation }) => {
       <View style={styles.container}>
         <View style={styles.userData}>
           <View style={styles.userPhoto}>
-            <Image />
+            <Image source={{ uri: userAvatar }} style={styles.userAva} />
           </View>
           <View style={styles.userInfo}>
             <Text style={styles.userLogin}>{userName}</Text>
@@ -71,6 +71,7 @@ const PostsScreen = ({ route, navigation }) => {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate("Comments", {
+                      navigateFrom: navigateFrom,
                       photoUrl: item.photoUrl,
                       postId: item.id,
                     });
@@ -150,6 +151,14 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+  },
+  userAva: {
+    display: "flex",
+    width: 60,
+    height: 60,
+    borderRadius: 16,
+    backgroundColor: "#F6F6F6",
+    marginRight: 8,
   },
 });
 

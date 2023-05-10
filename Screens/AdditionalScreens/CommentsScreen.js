@@ -43,7 +43,6 @@ const CommentsScreen = ({ route }) => {
     const postRef = doc(db, "posts", `${postId}`);
     const updatedComments = [...allComments, commentData]; // Обновляем массив комментариев
     await updateDoc(postRef, { comments: updatedComments }); // Передаем обновленный массив в функцию updateDoc()
-    setAllComments(updatedComments);
   };
 
   const getComments = async () => {

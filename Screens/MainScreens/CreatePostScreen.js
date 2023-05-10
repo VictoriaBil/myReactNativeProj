@@ -56,8 +56,6 @@ const CreatePostScreen = ({ navigation }) => {
         console.log("Permission to access location was denied");
         return;
       }
-      // await Camera.requestCameraPermissionsAsync();
-      // await MediaLibrary.requestPermissionsAsync();
       let location = await Location.getCurrentPositionAsync();
       console.log(location);
       const coords = {
@@ -84,15 +82,14 @@ const CreatePostScreen = ({ navigation }) => {
   };
 
   const sendPicture = () => {
-    // uploadPictureToServer();
     uploadPost();
     navigation.navigate("Posts", { photo });
   };
 
   const uploadPictureToServer = async () => {
-    // if (!photo || !location) {
-    //   return;
-    // }
+    if (!photo || !location) {
+      return;
+    }
 
     const response = await fetch(photo);
     const file = await response.blob();
@@ -139,10 +136,6 @@ const CreatePostScreen = ({ navigation }) => {
       console.log("Error while uploading post: ", error);
       alert("Failed to upload post");
     }
-
-    // uploadPost();
-    // navigation.navigate("Posts");
-    // setFormState(initialFormState);
   };
 
   const uploadPost = async () => {
