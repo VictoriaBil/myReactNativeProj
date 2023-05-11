@@ -18,7 +18,7 @@ const selectUserProfile = (state) => state.auth;
 const PostsScreen = ({ route, item, navigation, navigateFrom }) => {
   const [posts, setPosts] = useState([]);
 
-  const { userName, userEmail, userAvatar } = useSelector(selectUserProfile);
+  const { userName, userEmail } = useSelector(selectUserProfile);
 
   const getPosts = () => {
     onSnapshot(collection(db, "posts"), (collection) => {
@@ -42,7 +42,7 @@ const PostsScreen = ({ route, item, navigation, navigateFrom }) => {
       <View style={styles.container}>
         <View style={styles.userData}>
           <View style={styles.userPhoto}>
-            <Image source={{ uri: userAvatar }} style={styles.userAva} />
+            <Image style={styles.userAva} />
           </View>
           <View style={styles.userInfo}>
             <Text style={styles.userLogin}>{userName}</Text>

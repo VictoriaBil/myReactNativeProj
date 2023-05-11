@@ -21,7 +21,7 @@ const CommentsScreen = ({ route }) => {
   const [onFocus, setOnFocus] = useState(false);
   const [comment, setComment] = useState("");
   const [allComments, setAllComments] = useState([]);
-  const { userId, userAvatar } = useSelector(selectUserProfile);
+  const { userId } = useSelector(selectUserProfile);
   const { photoUrl, postId, navigateFrom } = route.params;
 
   useEffect(() => {
@@ -38,7 +38,6 @@ const CommentsScreen = ({ route }) => {
       userId: userId,
       comment: comment,
       date: Date.now(),
-      userAvatar: userAvatar,
     };
     const postRef = doc(db, "posts", `${postId}`);
     const updatedComments = [...allComments, commentData]; // Обновляем массив комментариев
@@ -76,10 +75,7 @@ const CommentsScreen = ({ route }) => {
                       {format(item.date, "PPpp")}
                     </Text>
                   </View>
-                  <Image
-                    source={{ uri: item.userAvatar }}
-                    style={styles.commentAva}
-                  />
+                  <Image style={styles.commentAva} />
                 </View>
               );
             })}
