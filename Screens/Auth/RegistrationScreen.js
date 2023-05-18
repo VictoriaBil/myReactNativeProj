@@ -53,7 +53,11 @@ export const RegistrationScreen = ({ navigation }) => {
   };
 
   const handleSubmit = () => {
-    console.log(formState);
+    const { userEmail, userPassword, userName } = formState;
+    if (!userEmail || !userPassword || !userName) {
+      alert("Please, fill out the form completely");
+      return;
+    }
     dispatch(authSignUpUser(formState));
     setFormState(initialFormState);
   };

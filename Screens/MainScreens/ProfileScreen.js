@@ -43,9 +43,9 @@ const ProfileScreen = ({ navigation }) => {
         <View
           style={{
             ...styles.profileWrapper,
-            // minHeight:
-            //   (Platform.OS == "ios" && "80%") ||
-            //   (Platform.OS == "android" && posts.length < 3 && 800),
+            minHeight:
+              (Platform.OS == "ios" && "80%") ||
+              (Platform.OS == "android" && posts.length < 3 && 800),
           }}
         >
           <View style={styles.avatarWrap}>

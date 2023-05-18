@@ -25,6 +25,7 @@ export const authSignUpUser =
           userId: uid,
           userName: displayName,
           userEmail: email,
+          stateChange: true,
         })
       );
     } catch (error) {

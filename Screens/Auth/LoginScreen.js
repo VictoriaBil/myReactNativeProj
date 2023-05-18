@@ -49,7 +49,11 @@ export const LoginScreen = ({ navigation }) => {
   };
 
   const handleSubmit = () => {
-    console.log(formState);
+    const { userEmail, userPassword } = formState;
+    if (!userEmail || !userPassword) {
+      alert("Please, fill out the form completely");
+      return;
+    }
     dispatch(authSignInUser(formState));
     setFormState(initialFormState);
   };
